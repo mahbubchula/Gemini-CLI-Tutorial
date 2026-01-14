@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Gemini CLI Tutorial (Windows) — Install to Power User Workflow</title>
+  <meta name="description" content="A student-friendly, step-by-step guide to installing and using Gemini CLI on Windows with file context, piping, project rules, and automation."/>
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: #0f1a2e;
+      --panel2:#0c1527;
+      --text:#e8eefc;
+      --muted:#b7c4e6;
+      --brand:#6ee7ff;
+      --brand2:#a78bfa;
+      --accent:#34d399;
+      --warn:#fbbf24;
+      --danger:#fb7185;
+      --line: rgba(255,255,255,.10);
+      --shadow: 0 16px 50px rgba(0,0,0,.45);
+      --radius: 16px;
+      --codebg:#081022;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 15% 0%, rgba(110,231,255,.12), transparent 50%),
+                  radial-gradient(900px 500px at 85% 10%, rgba(167,139,250,.12), transparent 55%),
+                  radial-gradient(1200px 700px at 50% 120%, rgba(52,211,153,.08), transparent 60%),
+                  var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    a{ color: var(--brand); text-decoration:none; }
+    a:hover{ text-decoration:underline; }
+
+    .wrap{
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    header{
+      margin: 10px 0 22px;
+      padding: 22px 22px 18px;
+      border:1px solid var(--line);
+      background: linear-gradient(135deg, rgba(110,231,255,.10), rgba(167,139,250,.10));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+
+    header::after{
+      content:"";
+      position:absolute; inset:-40px;
+      background: radial-gradient(circle at 20% 20%, rgba(110,231,255,.18), transparent 45%),
+                  radial-gradient(circle at 80% 30%, rgba(167,139,250,.18), transparent 48%);
+      filter: blur(8px);
+      opacity:.9;
+      pointer-events:none;
+    }
+
+    .hero{
+      position:relative;
+      display:grid;
+      grid-template-columns: 1.4fr .9fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    h1{
+      margin:0 0 8px;
+      font-size: clamp(26px, 3vw, 38px);
+      letter-spacing: .2px;
+    }
+
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      font-size: 15.5px;
+      max-width: 60ch;
+    }
+
+    .badgeRow{
+      margin-top: 14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .badge{
+      border:1px solid var(--line);
+      background: rgba(15,26,46,.7);
+      padding: 7px 10px;
+      border-radius: 999px;
+      font-size: 12.8px;
+      color: var(--muted);
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--brand);
+      box-shadow: 0 0 0 3px rgba(110,231,255,.12);
+    }
+    .dot.purple{ background: var(--brand2); box-shadow: 0 0 0 3px rgba(167,139,250,.12); }
+    .dot.green{ background: var(--accent); box-shadow: 0 0 0 3px rgba(52,211,153,.12); }
+
+    .quickbox{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(8,16,34,.65);
+      padding: 14px 14px 12px;
+      position:relative;
+    }
+
+    .quickbox h3{
+      margin:0 0 8px;
+      font-size: 14.5px;
+      color: var(--text);
+      letter-spacing:.2px;
+    }
+
+    .quickbox ul{
+      margin:0; padding-left: 18px;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    @media (min-width: 920px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+    }
+
+    section.card{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(15,26,46,.85), rgba(12,21,39,.72));
+      box-shadow: var(--shadow);
+      padding: 18px 18px 16px;
+    }
+
+    section.card h2{
+      margin:0 0 10px;
+      font-size: 18px;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      letter-spacing:.2px;
+    }
+
+    .step{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:28px; height:28px;
+      border-radius: 10px;
+      background: rgba(110,231,255,.12);
+      border:1px solid rgba(110,231,255,.25);
+      color: var(--brand);
+      font-weight: 700;
+      font-size: 13px;
+      flex:0 0 auto;
+    }
+
+    p{ margin: 10px 0; color: var(--muted); }
+    strong{ color: var(--text); }
+
+    .note{
+      border-left: 4px solid rgba(110,231,255,.55);
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(110,231,255,.06);
+      margin: 10px 0;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .warn{
+      border-left-color: rgba(251,191,36,.7);
+      background: rgba(251,191,36,.08);
+    }
+
+    .success{
+      border-left-color: rgba(52,211,153,.7);
+      background: rgba(52,211,153,.08);
+    }
+
+    .kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      background: rgba(255,255,255,.06);
+      border: 1px solid var(--line);
+      padding: 2px 8px;
+      border-radius: 10px;
+      color: var(--text);
+      font-size: 13px;
+      white-space: nowrap;
+    }
+
+    pre{
+      margin: 10px 0 12px;
+      background: linear-gradient(180deg, rgba(8,16,34,.92), rgba(6,12,26,.92));
+      border:1px solid var(--line);
+      border-radius: 14px;
+      padding: 12px 12px;
+      overflow:auto;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono","Courier New", monospace;
+      font-size: 13.2px;
+      color: #eaf2ff;
+    }
+
+    .twoCols{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+    @media (min-width: 920px){
+      .twoCols{ grid-template-columns: 1fr 1fr; }
+    }
+
+    .miniTitle{
+      color: var(--text);
+      font-size: 14px;
+      margin: 12px 0 6px;
+      letter-spacing:.2px;
+    }
+
+    table{
+      width:100%;
+      border-collapse: collapse;
+      border:1px solid var(--line);
+      border-radius: 14px;
+      overflow:hidden;
+      background: rgba(8,16,34,.55);
+    }
+    th, td{
+      padding: 10px 10px;
+      border-bottom:1px solid var(--line);
+      text-align:left;
+      vertical-align: top;
+      font-size: 13.5px;
+    }
+    th{
+      color: var(--text);
+      background: rgba(255,255,255,.04);
+      font-weight: 650;
+    }
+    td{ color: var(--muted); }
+    tr:last-child td{ border-bottom:none; }
+
+    footer{
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      text-align:center;
+      opacity:.9;
+    }
+
+    .pillRow{
+      display:flex; flex-wrap:wrap; gap:10px;
+      margin-top: 10px;
+    }
+
+    .pill{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.03);
+      padding: 8px 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="hero">
+        <div>
+          <h1>Gemini CLI Tutorial (Windows)</h1>
+          <p class="subtitle">
+            A student friendly guide to install Gemini CLI and use it daily for coding, debugging,
+            file based context, command piping, project rules, and automation.
+          </p>
+
+          <div class="badgeRow">
+            <span class="badge"><span class="dot"></span> Beginner friendly</span>
+            <span class="badge"><span class="dot purple"></span> PowerShell focused</span>
+            <span class="badge"><span class="dot green"></span> Practical commands</span>
+          </div>
+        </div>
+
+        <div class="quickbox">
+          <h3>What students will learn</h3>
+          <ul>
+            <li>Install and verify Gemini CLI</li>
+            <li>Login once and reuse</li>
+            <li>Read local files using @</li>
+            <li>Pipe command output with |</li>
+            <li>Use GEMINI.md for permanent rules</li>
+            <li>Run one line automation</li>
+          </ul>
+        </div>
+      </div>
+    </header>
+
+    <div class="grid">
+      <section class="card">
+        <h2><span class="step">0</span> Before you start</h2>
+        <p>
+          Gemini CLI runs through <strong>Node.js</strong>. You will install Node.js first, then install Gemini CLI using npm.
+          This tutorial assumes <strong>Windows + PowerShell</strong>.
+        </p>
+
+        <div class="note">
+          Tip: To open PowerShell in a folder, right click inside the folder and select
+          <span class="kbd">Open in Terminal</span>.
+        </div>
+
+        <p class="miniTitle">System requirements</p>
+        <div class="pillRow">
+          <span class="pill">Windows 10 or 11</span>
+          <span class="pill">PowerShell</span>
+          <span class="pill">Node.js 18+ (LTS)</span>
+          <span class="pill">Internet</span>
+          <span class="pill">Google account</span>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">1</span> Install Node.js</h2>
+        <p>
+          Gemini CLI is installed with npm, and npm comes with Node.js. Use Node.js LTS.
+        </p>
+
+        <p class="miniTitle">Check if Node.js is already installed</p>
+        <pre><code>node --version
+npm --version</code></pre>
+
+        <div class="note warn">
+          If you see "command not found", install Node.js LTS from
+          <a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a>,
+          then restart PowerShell and run the version commands again.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">2</span> Install Gemini CLI</h2>
+        <p>
+          Install Gemini CLI globally. This makes the <span class="kbd">gemini</span> command available everywhere.
+        </p>
+
+        <pre><code>npm install -g @google/gemini-cli</code></pre>
+
+        <p class="miniTitle">Verify installation</p>
+        <pre><code>gemini --version</code></pre>
+
+        <div class="note success">
+          If you see a version number, installation is successful.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">3</span> Fix PATH on Windows (if needed)</h2>
+        <p>
+          Sometimes Windows does not find npm global commands immediately. If
+          <span class="kbd">gemini --version</span> fails, add npm global path to your session.
+        </p>
+
+        <pre><code>$env:Path += ";C:\Users\&lt;YOUR-USERNAME&gt;\AppData\Roaming\npm"
+gemini --version</code></pre>
+
+        <div class="note warn">
+          Replace <span class="kbd">&lt;YOUR-USERNAME&gt;</span> with your Windows username.
+          You can find it in <span class="kbd">C:\Users\</span>.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">4</span> Login once (authentication)</h2>
+        <p>
+          Login connects Gemini CLI to your Google account. This is usually one time only.
+        </p>
+
+        <pre><code>gemini auth login</code></pre>
+
+        <div class="note">
+          This command opens your browser. Sign in, grant permission, then return to PowerShell.
+          The session is cached, so you do not login every time.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">5</span> Start interactive mode</h2>
+        <p>
+          Interactive mode is like a chat session, but it can read files and accept piped text.
+        </p>
+
+        <pre><code>gemini</code></pre>
+
+        <p class="miniTitle">Useful inside chat</p>
+        <div class="twoCols">
+          <div>
+            <pre><code>/clear
+/reset
+/exit</code></pre>
+          </div>
+          <div class="note">
+            <strong>/clear</strong> clears the screen.<br/>
+            <strong>/reset</strong> resets current session context.<br/>
+            <strong>/exit</strong> exits Gemini CLI.
+          </div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">6</span> Read files using @</h2>
+        <p>
+          The symbol <span class="kbd">@</span> means: read this file and include it as context.
+          This is the key advantage over browser chat.
+        </p>
+
+        <p class="miniTitle">Explain a Python script</p>
+        <pre><code>@script.py Explain this code step by step</code></pre>
+
+        <p class="miniTitle">Compare two versions</p>
+        <pre><code>@v1.py @v2.py What is the difference between these scripts?</code></pre>
+
+        <div class="note warn">
+          Avoid using wildcards on very large folders. It may overload context and reduce answer quality.
+        </div>
+
+        <p class="miniTitle">Wildcard example (small folder only)</p>
+        <pre><code>@*.txt Summarize these notes into one paragraph</code></pre>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">7</span> Pipe command output using |</h2>
+        <p>
+          Piping lets you send output from any command directly into Gemini. This avoids copy and paste.
+          It is ideal for logs, Git diffs, and system diagnostics.
+        </p>
+
+        <p class="miniTitle">Explain an error log</p>
+        <pre><code>Get-Content error.log | gemini "What caused this error and how do I fix it?"</code></pre>
+
+        <p class="miniTitle">Write a Git commit message</p>
+        <pre><code>git diff | gemini "Write a concise commit message for these changes"</code></pre>
+
+        <p class="miniTitle">Find memory heavy processes</p>
+        <pre><code>Get-Process | gemini "Which top 3 apps use the most memory? Explain briefly."</code></pre>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">8</span> Permanent project rules with GEMINI.md</h2>
+        <p>
+          You can set custom instructions per project. Gemini CLI automatically reads
+          <span class="kbd">GEMINI.md</span> from the current folder.
+        </p>
+
+        <p class="miniTitle">Create a project folder</p>
+        <pre><code>mkdir C:\Users\mahbu\MyCodingProject
+cd C:\Users\mahbu\MyCodingProject</code></pre>
+
+        <p class="miniTitle">Create GEMINI.md</p>
+        <pre><code># GEMINI.md
+You are a strict senior Python reviewer.
+Prefer efficient code.
+Point out bugs and edge cases.
+Be concise and practical.</code></pre>
+
+        <div class="note success">
+          Now every time you run <span class="kbd">gemini</span> inside that folder, these rules apply automatically.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">9</span> One line automation</h2>
+        <p>
+          You can run a single prompt and exit immediately. This is useful for scripts and quick tasks.
+        </p>
+
+        <pre><code>gemini "Write a professional email saying I will be 10 minutes late to the meeting"</code></pre>
+
+        <div class="note">
+          Students can embed this into batch scripts, research pipelines, or Git hooks.
+        </div>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">10</span> Cheat sheet</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Goal</th>
+              <th>Command</th>
+              <th>Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Start chat</td>
+              <td><span class="kbd">gemini</span></td>
+              <td>Interactive session</td>
+            </tr>
+            <tr>
+              <td>Read file</td>
+              <td><span class="kbd">@filename</span></td>
+              <td><span class="kbd">@data.csv</span> Analyze this</td>
+            </tr>
+            <tr>
+              <td>Read many files</td>
+              <td><span class="kbd">@*.py</span></td>
+              <td>Find bugs in these scripts</td>
+            </tr>
+            <tr>
+              <td>Pipe output</td>
+              <td><span class="kbd">command | gemini "prompt"</span></td>
+              <td><span class="kbd">git diff | gemini "commit msg"</span></td>
+            </tr>
+            <tr>
+              <td>One line ask</td>
+              <td><span class="kbd">gemini "text"</span></td>
+              <td>Quick help then exit</td>
+            </tr>
+            <tr>
+              <td>Clear screen</td>
+              <td><span class="kbd">/clear</span></td>
+              <td>Inside chat mode</td>
+            </tr>
+            <tr>
+              <td>Reset session</td>
+              <td><span class="kbd">/reset</span></td>
+              <td>Inside chat mode</td>
+            </tr>
+            <tr>
+              <td>Exit</td>
+              <td><span class="kbd">/exit</span></td>
+              <td>Inside chat mode</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card">
+        <h2><span class="step">11</span> Student assignment</h2>
+        <p>
+          This short task proves that Gemini CLI can analyze real system output.
+        </p>
+        <pre><code>Get-Process | gemini "Identify the top 3 memory consuming processes. Explain what each likely does."</code></pre>
+
+        <div class="note warn">
+          Note: Gemini only sees what PowerShell prints. It does not control your computer.
+          It analyzes text output like any other input.
+        </div>
+      </section>
+    </div>
+
+    <footer>
+      Built for teaching and reproducible workflows. Upload as <span class="kbd">index.html</span> and publish with GitHub Pages.
+    </footer>
+  </div>
+</body>
+</html>
