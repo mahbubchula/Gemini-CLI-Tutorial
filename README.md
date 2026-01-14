@@ -267,7 +267,7 @@ This demonstrates:
 
 ## License
 
-This tutorial is provided for **educational and academic use**.
-You may reuse, adapt, and distribute it for teaching purposes.
+This project is licensed under the MIT License.  
+See the [LICENSE](LICENSE) file for details.
 
 ---
