@@ -1,11 +1,4 @@
-Below is a **clean, professional `README.md`** designed specifically for **students**, **GitHub Pages**, and **teaching use**.
-It matches the HTML tutorial you created and uses **simple language**, **clear structure**, and **copy-paste-ready commands**.
 
-You can place this file at the **root of your GitHub repository**.
-
----
-
-````markdown
 # Gemini CLI Tutorial (Windows)
 
 A **student-friendly, step-by-step guide** to installing and using **Gemini CLI** on Windows.  
